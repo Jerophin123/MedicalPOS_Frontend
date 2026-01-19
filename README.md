@@ -78,9 +78,34 @@ The project is configured to build with:
 - Base href: `/`
 - Production optimizations enabled
 
+## Troubleshooting
+
+### API URL Still Shows localhost:8080 After Deployment
+
+If the deployed application is still trying to connect to `localhost:8080`, check:
+
+1. **Verify Build Configuration**: Ensure `angular.json` has `fileReplacements` in the production configuration
+2. **Clear Build Cache**: Delete `node_modules` and `.angular` folders, then rebuild
+3. **Browser Cache**: Clear browser cache or use incognito mode to test
+4. **Vercel Build Logs**: Check Vercel build logs to ensure production configuration is used
+5. **Verify Environment File**: Check that `environment.prod.ts` has the correct API URL
+
+### Build Verification
+
+To verify the build uses the correct environment:
+
+```bash
+# Build the project
+npm run build
+
+# Check the built main.js file (it should contain the production API URL)
+grep -r "medicalpos-backend.onrender.com" dist/medical-store-pos/browser/
+```
+
 ## Notes
 
 - The production API URL is already configured to `https://medicalpos-backend.onrender.com/api`
 - To change the API URL, update `src/environments/environment.prod.ts` before building
 - The frontend uses Angular routing, so ensure your hosting provider supports SPA routing (all routes redirect to index.html)
+- The build script automatically uses production configuration with environment file replacement
 
